@@ -1,0 +1,23 @@
+{
+  "name": "node-oil-webapp",
+  "version": "1.0.0",
+  "description": "Node.js webapp creating an IoT monitoring Oil Dashboard",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ngunderson/node-oil-webapp.git"
+  },
+  "author": "Nathan Gunderson",
+  "license": "GNU",
+  "bugs": {
+    "url": "https://github.com/ngunderson/node-oil-webapp/issues"
+  },
+  "homepage": "https://github.com/ngunderson/node-oil-webapp#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
