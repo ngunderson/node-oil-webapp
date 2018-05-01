@@ -1,5 +1,5 @@
 #!/bin/bash
-imageName=falconer/node-oil-server:v0.0.1
+imageName=falconer/node-oil-server:v0.0.2
 containerName=server
 
 docker build -t $imageName -f Dockerfile  .
