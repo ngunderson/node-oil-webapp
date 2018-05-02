@@ -5,8 +5,8 @@
 //var socket = new WebSocket("ws://" + location.host);
 var POLL_RATE = 5000; // 5s poll interval
 var prev_data = {};
-getLatestData();
-setInterval(getLatestData, POLL_RATE);
+//getLatestData();
+//setInterval(getLatestData, POLL_RATE);
 
 //Setting Graph traces
 var avgTempTrace = {
@@ -156,3 +156,10 @@ function displayData(data) {
     }
     prev_data = data;
 }
+
+$.getJSON("/testData").then(data => {
+    console.log("DATA RECEIVED: ", data);
+    avgTempTrace.x = data.x;
+    avgTempTrace.y = data.y;
+    updateTempGraph();
+});

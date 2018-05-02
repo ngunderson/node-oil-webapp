@@ -1,6 +1,7 @@
 const express = require('express');
 const iotHubClient = require('./iot-hub.js');
 const moment = require('moment');
+const path = require('path');
 
 // Constants
 const PORT = 8080;
@@ -33,9 +34,40 @@ iotHubReader.startReadMessage((obj, date) => {
     }
 });
 
+// HTML endpoints
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname + '/public/index.html'));
+});
+
+app.get('/settings', (req, res) => {
+    res.sendFile(path.join(__dirname + '/public/settings.html'));
+});
+
+app.get('/graph', (req, res) => {
+    res.sendFile(path.join(__dirname + '/public/graph.html'));
+});
+
+// API endpoints
 app.get('/latestData', (req, res) => {
     res.send(JSON.stringify(mostRecentMessage));
 });
+
+app.get('/testData', (req, res) => {
+    var xdata = Array.from({length: 40000}, (v, k) => k+1);
+    var ydata = Array.from({length: 40000}, (v, k) => k+1);
+    var garbageData = Array(40000).fill({
+	"test": "matt data",
+	"matt": "test test",
+	"long": "stringggggggggggggggggggggggggggggggggggggggggas;lkjd;fda"
+    });
+    var data = {
+	x: xdata,
+	y: ydata,
+	garbage: garbageData
+    }
+    res.send(JSON.stringify(data));
+});
+
 
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
