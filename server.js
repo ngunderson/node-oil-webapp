@@ -1,7 +1,8 @@
 const express = require('express');
 const iotHubClient = require('./iot-hub.js');
-const moment = require('moment');
+const moment = require('moment-timezone');
 const path = require('path');
+const azure = require('azure-storage');
 
 // Constants
 const PORT = 8080;
@@ -11,6 +12,8 @@ const HOST = '0.0.0.0';
 const app = express();
 
 app.use(express.static('public'));
+
+storage = azure.createTableService();
 
 var mostRecentMessage = {"default": "no data received"};
 
@@ -43,8 +46,8 @@ app.get('/settings', (req, res) => {
     res.sendFile(path.join(__dirname + '/public/settings.html'));
 });
 
-app.get('/graph', (req, res) => {
-    res.sendFile(path.join(__dirname + '/public/graph.html'));
+app.get('/historic', (req, res) => {
+    res.sendFile(path.join(__dirname + '/public/historic.html'));
 });
 
 // API endpoints
@@ -52,22 +55,184 @@ app.get('/latestData', (req, res) => {
     res.send(JSON.stringify(mostRecentMessage));
 });
 
-app.get('/testData', (req, res) => {
-    var xdata = Array.from({length: 40000}, (v, k) => k+1);
-    var ydata = Array.from({length: 40000}, (v, k) => k+1);
-    var garbageData = Array(40000).fill({
-	"test": "matt data",
-	"matt": "test test",
-	"long": "stringggggggggggggggggggggggggggggggggggggggggas;lkjd;fda"
-    });
-    var data = {
-	x: xdata,
-	y: ydata,
-	garbage: garbageData
+app.get('/past/temp', (req, res) => {
+    console.log("PARAMS: ", req.query)
+    var day = Number(req.query.day);
+    if (isNaN(day)) {
+	res.sendStatus(400);
+	return;
     }
-    res.send(JSON.stringify(data));
+    var oldestDate = moment().subtract(day, "days").toDate();;
+    console.log("date: ", oldestDate);
+    var query = new azure.TableQuery()
+	.select('eventenqueuedutctime', 'avgtemp')
+	.top(1000)
+	.where('eventenqueuedutctime ge ?date?', oldestDate);
+
+    retrieveData('TemperatureRecords', query, null).then((data) => {
+	console.log("Data retrieve finished");
+	console.log("DATA LEN: ", data.length);
+	minData = formatTempData(data);
+	res.send(JSON.stringify(minData));
+    }).catch((err) => {
+	console.log("QUERY ERR: ", err);
+	res.sendStatus(500);
+    });
+});
+
+app.get('/past/level', (req, res) => {
+    console.log("PARAMS: ", req.query)
+    var day = Number(req.query.day);
+    if (isNaN(day)) {
+	res.sendStatus(400);
+	return;
+    }
+    var oldestDate = moment().subtract(day, "days").toDate();;
+    console.log("date: ", oldestDate);
+    var query = new azure.TableQuery()
+	.select('eventenqueuedutctime', 'level')
+	.top(1000)
+	.where('eventenqueuedutctime ge ?date?', oldestDate);
+
+    retrieveData('LevelRecords', query, null).then((data) => {
+	console.log("Data retrieve finished", data[1500]);
+	console.log("DATA LEN: ", data.length);
+	minData = formatLevelData(data);
+	res.send(JSON.stringify(minData));
+    }).catch((err) => {
+	console.log("QUERY ERR: ", err);
+	res.sendStatus(500);
+    });
+});
+
+app.get('/past/quality', (req, res) => {
+    console.log("PARAMS: ", req.query)
+    var day = Number(req.query.day);
+    if (isNaN(day)) {
+	res.sendStatus(400);
+	return;
+    }
+    var oldestDate = moment().subtract(day, "days").toDate();;
+    console.log("date: ", oldestDate);
+    var query = new azure.TableQuery()
+	.select('eventenqueuedutctime', 'quality')
+	.top(1000)
+	.where('eventenqueuedutctime ge ?date?', oldestDate);
+
+    retrieveData('QualityRecords', query, null).then((data) => {
+	console.log("Data retrieve finished");
+	console.log("DATA LEN: ", data.length);
+	minData = formatQualityData(data);
+	res.send(JSON.stringify(minData));
+    }).catch((err) => {
+	console.log("QUERY ERR: ", err);
+	res.sendStatus(500);
+    });
 });
 
 
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
+
+function retrieveData(table, query, nextToken) {
+    var data = [];
+    console.log("retrieving data");
+    return new Promise((resolve, reject) => {
+        storage.queryEntities(table, query, nextToken, (error, result, response) => {
+            if(error) {
+	    	console.log("rejecting with error", error);
+                reject(error);
+		return;
+                // check if need to return data
+            }
+	    data = data.concat(result.entries);
+	    //console.log("entry length: ", result.entries.length);
+	    if (result.continuationToken == null) {
+	    	console.log("token null, resolving data");
+	    	resolve(data);
+		return;
+	    }
+	    console.log("data added: ", data.length);
+	    console.log("token: ", result.continuationToken);
+            appendData(table, data, query, result.continuationToken, resolve, reject);
+        });
+
+    });
+}
+
+function appendData(table, data, query, nextToken, resolve, reject) {
+    console.log("appending data");
+    storage.queryEntities(table, query, nextToken, (error, result, response) => {
+        if(error) {
+	    console.log("rejecting with error", error);
+            reject(error);
+	    return;
+            // check if need to return data
+        }
+	data = data.concat(result.entries);
+	//console.log(data.slice(data.length - 700));
+	if (result.continuationToken == null) {
+	    console.log("token null, resolving data");
+	    resolve(data);
+	    return;
+	}
+	console.log("data added: ", data.length);
+	console.log("token: ", result.continuationToken);
+        appendData(table, data, query, result.continuationToken, resolve, reject);
+    });
+
+}
+
+function formatTempData(data) {
+    xData = [];
+    yData = [];
+    data.forEach((entry) => {
+	xData.push(
+	    moment(entry.eventenqueuedutctime._)
+		.tz('America/Chicago')
+		.format("YYYY-MM-DD HH:mm:ss")
+	);
+	//console.log("ENTRY: ", entry);
+	yData.push(+Number(entry.avgtemp._).toFixed(2));
+    });
+    return {
+	x: xData,
+	y: yData
+    }
+}
+
+function formatLevelData(data) {
+    xData = [];
+    yData = [];
+    data.forEach((entry) => {
+	xData.push(
+	    moment(entry.eventenqueuedutctime._)
+		.tz('America/Chicago')
+		.format("YYYY-MM-DD HH:mm:ss")
+	);
+	//console.log("ENTRY: ", entry);
+	yData.push(+Number(entry.level._).toFixed(2));
+    });
+    return {
+	x: xData,
+	y: yData
+    }
+}
+
+function formatQualityData(data) {
+    xData = [];
+    yData = [];
+    data.forEach((entry) => {
+	xData.push(
+	    moment(entry.eventenqueuedutctime._)
+		.tz('America/Chicago')
+		.format("YYYY-MM-DD HH:mm:ss")
+	);
+	//console.log("ENTRY: ", entry);
+	yData.push(+Number(entry.quality._).toFixed(2));
+    });
+    return {
+	x: xData,
+	y: yData
+    }
+}

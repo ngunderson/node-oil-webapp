@@ -17,7 +17,7 @@
 /* Oil Level Bar Indicator */
 #myProgress{
     left: 650;
-    top: 150;
+    top: 100;
     transform: rotate(180deg);
     width: 50px;
     height: 300;
@@ -32,14 +32,24 @@
 }
 #percentDIV{
     left: 665;
-    top: 460;
+    top: 410;
     position: absolute;
 }
 #lblOilLevel{
     left: 630;
-    top: 130;
+    top: 80;
     position: absolute;
 }
 #percentLabel{
     font-size: 20px;
+}
+/*Oil Quality Indicator*/
+#lblOilQuality{
+    position:absolute;
+    left: 610;
+    top: 475;
+}
+#oilQuality{
+    position: relative;
+    left:40%;
 }

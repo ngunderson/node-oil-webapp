@@ -1,30 +1,28 @@
-//TODO: (1) Have the data from the array erase the oldest data past a number
-// of logs Ex.Circular Queue
-
-
-//var socket = new WebSocket("ws://" + location.host);
 var POLL_RATE = 5000; // 5s poll interval
 var prev_data = {};
-//getLatestData();
-//setInterval(getLatestData, POLL_RATE);
+getLatestData();
+setInterval(getLatestData, POLL_RATE);
 
 //Setting Graph traces
 var avgTempTrace = {
     x:[],
     y:[],
     type: "scatter",
+    mode: "lines+markers",
     name: "Avg Temperature"
 };
 var oilLevelTrace = {
     x:[],
     y:[],
     type: "scatter",
+    mode: "lines+markers",
     name: "Oil Level"
 };
 var oilQualityTrace = {
     x:[],
     y:[],
     type: "scatter",
+    mode: "lines+markers",
     name: "Oil Quality"
 };
 
@@ -65,6 +63,11 @@ function setOilLevel(level)
     bar.style.height = amount;
 }
 
+function setOilQuality(dialectric)
+{
+	var digit = document.getElementById("oilQuality");
+	digit.innerHTML = dialectric;
+}
 
 
 //Graph Update functions & STUFF
@@ -79,7 +82,7 @@ var levelLayout = {
     height: 250
 };
 var qualityLayout = {
-    title:'Temperature VS Time',
+    title:'Quality VS Time',
     width: 600,
     height: 250
 };
@@ -107,11 +110,11 @@ function getLatestData() {
 function displayData(data) {
     console.log("INFO: Message Received: ", data);
     if (data.hasOwnProperty('default') || data.time === prev_data.time) {
-	console.log("WARNING: Server receiving no data.");
+	console.warn("Server receiving no data.");
 	return;
     }
     if (!data.time) {
-	console.log("ERROR: No time sent by server!");
+	console.error("No time sent by server!");
 	return;
     }
 
@@ -128,38 +131,33 @@ function displayData(data) {
     var time = data.time;
     console.log("INFO: Time is ", time);
 
-
     //Does not matter if the values are undefined as they wont be updated
     updateSensors(temp1,temp2,temp3,temp4);
+
     //Setting OilLevel
     if(oilLevel != undefined)
     {
-	//var pLevel = (oilLevel / TOTALOIL) * 100
-	//or depending on what value is being sent *delete one*
-	//var pLevel = (TOTALOIL - oilLevel) / TOTALOIL * 100
 	setOilLevel(oilLevel);
 	oilLevelTrace["y"].push(oilLevel);
-	oilLevelTrace["x"].push(time);//Time Here Now time or send time over socket?
+	oilLevelTrace["x"].push(time);
 	updateLevelGraph();
     }
     if(avgTemp != undefined)
     {
 	avgTempTrace["y"].push(avgTemp);
-	avgTempTrace["x"].push(time);//Time Here Now time or send time over socket?
+	avgTempTrace["x"].push(time);
 	updateTempGraph();
     }
     if(oilQuality != undefined)
     {
 	oilQualityTrace["y"].push(oilQuality);
-	oilQualityTrace["x"].push(time);//Time Here Now time or send time over socket?
+	oilQualityTrace["x"].push(time);
+	setOilQuality(oilQuality);
 	updateQualityGraph();
     }
     prev_data = data;
 }
 
-$.getJSON("/testData").then(data => {
-    console.log("DATA RECEIVED: ", data);
-    avgTempTrace.x = data.x;
-    avgTempTrace.y = data.y;
-    updateTempGraph();
-});
+updateTempGraph();
+updateQualityGraph();
+updateLevelGraph();

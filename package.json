@@ -21,6 +21,6 @@
     "azure-event-hubs": "0.0.8",
     "azure-storage": "^2.8.2",
     "express": "^4.16.3",
-    "moment": "^2.22.1"
+    "moment-timezone": "^0.5.16"
   }
 }

@@ -2,7 +2,7 @@
   <head>
     <title>Oil Monitor</title>
     <link rel="icon" href="image/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
     <script src="js/plotly-1.36.1.min.js"></script>
     <script src="js/jquery-3.3.1.min.js"></script>
   </head>
@@ -15,12 +15,12 @@
     <!-- Verticle Blue Line Page Selector -->
     <div style="position: absolute; border-left: 80px solid #0b86ca; height: 100%; top: 80; left: 0px;"></div>
     <!-- Begin setting up Line Charts -->
-    <div id="oilTempGraph" style="position: absolute; left: 950px; top: 25;"></div>
-    <div id="oilLevelGraph" style="position: absolute; left: 950px; top: 250;"></div>
-    <div id="oilQualityGraph" style="position: absolute; left: 950px; top: 475;"></div>
+    <div id="oilTempGraph" style="position: absolute; left: 775px; top: 25;"></div>
+    <div id="oilLevelGraph" style="position: absolute; left: 775px; top: 250;"></div>
+    <div id="oilQualityGraph" style="position: absolute; left: 775px; top: 475;"></div>
     <!-- Links to other pages-->
     <div><a href="/"><img id="Home" src="image/home.png" style="position: absolute; width: 36; height: 34; top: 105; left: 15;"/></a></div>
-    <div><a href="/graph"><img id="AdvancedGraph" src="image/graph.png" style="position: absolute; width: 36; height: 27; top: 180; left: 15;"/></a></div>
+    <div><a href="/historic"><img id="AdvancedGraph" src="image/graph.png" style="position: absolute; width: 36; height: 27; top: 180; left: 15;"/></a></div>
     <div><a href="/settings"><img id="Settings" src="image/settings.png" style="position: absolute; width: 36; height: 36; top: 248; left: 15;"/></a></div>
 
     <div id="lblOilLevel"><font size="4"><b>OIL LEVEL</b></font></div>
@@ -28,6 +28,11 @@
       <div id="oilLevelBar"></div>
     </div>
     <div id="percentDIV"><b><label id="percentLabel">0%</label></b></div>
+
+    <div id="lblOilQuality"><font size ="4"><b>OIL QUALITY:</b></font>
+      <div id ="oilQuality"><font size = "6"><b>N/A</b></font></div>
+    </div>
+
 
     <div class="tempIcon" style="left: 140; top: 170;">
       <image class="tempIMG" src="image/TempIcon.png"></image>
