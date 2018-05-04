@@ -1,21 +1,24 @@
 #historicGraph{
-	position:absolute;
-	left: 85;
-	top: 75;
+    position:absolute;
+    left: 85;
+    top: 75;
 }
 
-.selector{
-	position: relative;
-	left:650;
-	transform: scale(2);
+.daySelector{
+    position: relative;
+    left:650;
+    transform: scale(2);
+}
+
+.deviceSelector{
+    position: relative;
+    left:565;
+    transform: scale(2);
 }
 
 .chk{
-	position:relative;
-	left:700;
-	margin-right: 7px;
-	transform: scale(2);
+    position:relative;
+    left:700;
+    margin-right: 7px;
+    transform: scale(2);
 }
-
-	
-	

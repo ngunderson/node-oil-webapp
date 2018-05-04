@@ -58,7 +58,9 @@ app.get('/latestData', (req, res) => {
 app.get('/past/temp', (req, res) => {
     console.log("PARAMS: ", req.query)
     var day = Number(req.query.day);
-    if (isNaN(day)) {
+    var device = String(req.query.device);
+
+    if (isNaN(day) || typeof(device) !== "string") {
 	res.sendStatus(400);
 	return;
     }
@@ -67,11 +69,13 @@ app.get('/past/temp', (req, res) => {
     var query = new azure.TableQuery()
 	.select('eventenqueuedutctime', 'avgtemp')
 	.top(1000)
-	.where('eventenqueuedutctime ge ?date?', oldestDate);
+	.where('eventenqueuedutctime ge ?date?'
+	       + 'and deviceid eq ?string?', oldestDate, device);
 
     retrieveData('TemperatureRecords', query, null).then((data) => {
 	console.log("Data retrieve finished");
 	console.log("DATA LEN: ", data.length);
+	console.log("first data:  ", data[0]);
 	minData = formatTempData(data);
 	res.send(JSON.stringify(minData));
     }).catch((err) => {
@@ -83,7 +87,9 @@ app.get('/past/temp', (req, res) => {
 app.get('/past/level', (req, res) => {
     console.log("PARAMS: ", req.query)
     var day = Number(req.query.day);
-    if (isNaN(day)) {
+    var device = String(req.query.device);
+
+    if (isNaN(day) || typeof(device) !== "string") {
 	res.sendStatus(400);
 	return;
     }
@@ -92,7 +98,8 @@ app.get('/past/level', (req, res) => {
     var query = new azure.TableQuery()
 	.select('eventenqueuedutctime', 'level')
 	.top(1000)
-	.where('eventenqueuedutctime ge ?date?', oldestDate);
+	.where('eventenqueuedutctime ge ?date?'
+	       + 'and deviceid eq ?string?', oldestDate, device);
 
     retrieveData('LevelRecords', query, null).then((data) => {
 	console.log("Data retrieve finished", data[1500]);
@@ -108,7 +115,9 @@ app.get('/past/level', (req, res) => {
 app.get('/past/quality', (req, res) => {
     console.log("PARAMS: ", req.query)
     var day = Number(req.query.day);
-    if (isNaN(day)) {
+    var device = String(req.query.device);
+
+    if (isNaN(day) || typeof(device) !== "string") {
 	res.sendStatus(400);
 	return;
     }
@@ -117,7 +126,8 @@ app.get('/past/quality', (req, res) => {
     var query = new azure.TableQuery()
 	.select('eventenqueuedutctime', 'quality')
 	.top(1000)
-	.where('eventenqueuedutctime ge ?date?', oldestDate);
+	.where('eventenqueuedutctime ge ?date?'
+	       + 'and deviceid eq ?string?', oldestDate, device);
 
     retrieveData('QualityRecords', query, null).then((data) => {
 	console.log("Data retrieve finished");
@@ -186,13 +196,19 @@ function appendData(table, data, query, nextToken, resolve, reject) {
 function formatTempData(data) {
     xData = [];
     yData = [];
-    data.forEach((entry) => {
+    data.forEach((entry, idx) => {
+	if (entry.avgtemp._ == null) {
+	    console.log(idx);
+	    console.log("NULL FOUND!!");
+	    console.log("DATA: ", entry);
+	    return;
+	}
+
 	xData.push(
 	    moment(entry.eventenqueuedutctime._)
 		.tz('America/Chicago')
 		.format("YYYY-MM-DD HH:mm:ss")
 	);
-	//console.log("ENTRY: ", entry);
 	yData.push(+Number(entry.avgtemp._).toFixed(2));
     });
     return {
@@ -205,12 +221,17 @@ function formatLevelData(data) {
     xData = [];
     yData = [];
     data.forEach((entry) => {
+	if (entry.level._ == null) {
+	    console.log(idx);
+	    console.log("NULL FOUND!!");
+	    console.log("DATA: ", entry);
+	    return;
+	}
 	xData.push(
 	    moment(entry.eventenqueuedutctime._)
 		.tz('America/Chicago')
 		.format("YYYY-MM-DD HH:mm:ss")
 	);
-	//console.log("ENTRY: ", entry);
 	yData.push(+Number(entry.level._).toFixed(2));
     });
     return {
@@ -223,12 +244,17 @@ function formatQualityData(data) {
     xData = [];
     yData = [];
     data.forEach((entry) => {
+	if (entry.quality._ == null) {
+	    console.log(idx);
+	    console.log("NULL FOUND!!");
+	    console.log("DATA: ", entry);
+	    return;
+	}
 	xData.push(
 	    moment(entry.eventenqueuedutctime._)
 		.tz('America/Chicago')
 		.format("YYYY-MM-DD HH:mm:ss")
 	);
-	//console.log("ENTRY: ", entry);
 	yData.push(+Number(entry.quality._).toFixed(2));
     });
     return {

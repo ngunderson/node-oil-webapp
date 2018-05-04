@@ -24,7 +24,12 @@
 
 	<!-- Historic Graph -->
 	<div id="historicGraph">
-	<select id = daySelect class="selector">
+	<select id ="deviceSelect" class="deviceSelector">
+	<option value="pi">pi</option>
+	<option value="Arduino">Arduino</option>
+	</select>
+
+	<select id ="daySelect" class="daySelector">
 	<option value="1">1 Day</option>
 	<option value="3">3 Day</option>
 	<option value="5">5 Day</option>
@@ -33,16 +38,15 @@
 	<option value="30">30 Day</option>
 	</select>
 
-	<input class="chk" id="chkTemp" onclick='updateTrace();' type="checkbox"></input>
-	<label class = "chk" for="chkTemp">Oil Temperature</label>
+	<input class="chk" id="chkTemp" type="checkbox"></input>
+	<label class ="chk" for="chkTemp">Oil Temperature</label>
 
-	<input class="chk" id="chkQuality" onclick='updateTrace()' type="checkbox">
+	<input class="chk" id="chkQuality" type="checkbox">
 	<label class="chk" for="chkQuality">Oil Quality</label>
 
-	<input class="chk" id="chkLevel" onclick='updateTrace()' type="checkbox">
+	<input class="chk" id="chkLevel" type="checkbox">
 	<label class="chk"for="chkLevel">Oil Level</label>
 	</div>
-
 
 	<script src="js/historic.js"></script>
   </body>

@@ -2,82 +2,102 @@ var historicLayout = {
     title:'History',
     width: 1400,
     height: 500,
-	showlegend: true
+    showlegend: true
 };
-var tempTrace =
-{
-	x:[],
-	y:[],
-        type: 'scatter',
-        mode: 'lines+markers',
-	name: 'Temperature'
+var tempTrace = {
+    x:[],
+    y:[],
+    type: 'scatter',
+    mode: 'lines+markers',
+    name: 'Temperature'
 };
 
-var qualityTrace =
-{
-	x:[],
-	y:[],
-        type: 'scatter',
-        mode: 'lines+markers',
-	name: 'Quality'
+var qualityTrace = {
+    x:[],
+    y:[],
+    type: 'scatter',
+    mode: 'lines+markers',
+    name: 'Quality'
 }
 
-var levelTrace =
-{
-	x:[],
-	y:[],
-        type: 'scatter',
-        mode: 'lines+markers',
-	name: 'Level'
+var levelTrace = {
+    x:[],
+    y:[],
+    type: 'scatter',
+    mode: 'lines+markers',
+    name: 'Level'
 };
-
-var data = [];
 
 function FillTemp(points)
 {
-        tempTrace["x"] = points.x;
-        tempTrace["y"] = points.y;
-        updateGraph();
+    tempTrace["x"] = points.x;
+    tempTrace["y"] = points.y;
 
 }
 function FillLevel(points)
 {
-	levelTrace["x"] = points.x;
-	levelTrace["y"] = points.y;
-	updateGraph();
-
+    levelTrace["x"] = points.x;
+    levelTrace["y"] = points.y;
 }
 function FillQuality(points)
 {
-	qualityTrace["x"] = points.x;
-	qualityTrace["y"] = points.y;
-	updateGraph();
-
+    qualityTrace["x"] = points.x;
+    qualityTrace["y"] = points.y;
 }
 
 
 function updateGraph()
 {
-        data = [];
-    	if(chkTemp.checked)
-		data.push(tempTrace);
-	if(chkQuality.checked)
-		data.push(qualityTrace);
-	if(chkLevel.checked)
-		data.push(levelTrace);
+    var data = [];
+    if(chkTemp.checked)
+	data.push(tempTrace);
+    if(chkQuality.checked)
+	data.push(qualityTrace);
+    if(chkLevel.checked)
+	data.push(levelTrace);
 
-	Plotly.newPlot('historicGraph',data,historicLayout);
+    Plotly.newPlot('historicGraph', data, historicLayout);
 }
+
 function updateTrace()
 {
-	var chkTemp = document.getElementById("chkTemp");
-	var chkQuality = document.getElementById("chkQuality");
-	var chkLevel = document.getElementById("chkLevel");
-	var daySelect = document.getElementById("daySelect");
-	var day = daySelect.options[daySelect.selectedIndex].value;
+    var chkTemp = document.getElementById("chkTemp");
+    var chkQuality = document.getElementById("chkQuality");
+    var chkLevel = document.getElementById("chkLevel");
+    var daySelect = document.getElementById("daySelect");
+    var day = daySelect.options[daySelect.selectedIndex].value;
+    var deviceSelect = document.getElementById("deviceSelect");
+    var device = deviceSelect.options[deviceSelect.selectedIndex].value;
 
-	$.getJSON("/past/temp",{"day":day}).then(FillTemp);
-	$.getJSON("/past/level",{"day":day}).then(FillLevel);
-	$.getJSON("/past/quality",{"day":day}).then(FillQuality);
+    var qParams = {
+	"day": day,
+	"device": device
+    };
+
+    var promises = [];
+    if (chkTemp.checked)
+	promises.push($.getJSON("/past/temp",qParams).then(FillTemp));
+    if (chkQuality.checked)
+	promises.push($.getJSON("/past/quality",qParams).then(FillQuality));
+    if (chkLevel.checked)
+	promises.push($.getJSON("/past/level",qParams).then(FillLevel));
+
+    if (promises.length > 0)
+	Promise.all(promises).then(updateGraph);
 }
+
+$('input[type=checkbox]').click(function () {
+    if ($(this).is(":not(:checked)"))
+	updateGraph();
+    else
+	updateTrace();
+});
+
+$('#deviceSelect').change(function () {
+    updateTrace();
+});
+
+$('#daySelect').change(function () {
+    updateTrace();
+});
 updateGraph();
