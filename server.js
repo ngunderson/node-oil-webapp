@@ -32,6 +32,10 @@ var mostRecentMessage = {"default": "no data received"};
 var iotHubReader = new iotHubClient(process.env['Azure.IoT.IoTHub.ConnectionString'], process.env['Azure.IoT.IoTHub.ConsumerGroup']);
 iotHubReader.startReadMessage((obj, date) => {
     try {
+	if (obj.default = "empty") {
+	    console.log("device paused message");
+	    return;
+	}
         console.log("Message: ", obj);
         date = date || Date.now()
 	Object.assign(obj, { time: moment.utc(date).format('hh:mm:ss')});
@@ -177,8 +181,13 @@ app.post('/settings', (req, res) => {
     if (cmd.Q_ALERT == QUALITY_ALERT)
 	delete cmd.Q_ALERT;
 
+    if (req.body.CMD == "START" || req.body.CMD == "STOP") {
+	cmd.CMD = req.body.CMD;
+    }
+
     if (Object.keys(cmd).length == 0) {
 	res.sendStatus(200);
+	console.log("settings have not changed, returning")
 	return;
     }
 
@@ -188,7 +197,7 @@ app.post('/settings', (req, res) => {
 	    res.sendStatus(500);
 	} else {
 	    setTimeout(function() {
-		endConnection(res);
+		endConnection(res, cmd);
 	    }, 2000);
 	    connOpen = true;
 	    console.log('Service client connected');

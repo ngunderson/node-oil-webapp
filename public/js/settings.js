@@ -28,7 +28,8 @@ function checkInputs()
     //Collection Rate
     var collectionRate = document.getElementById("collectionRate").value;
 
-    if(validInput(collectionRate)) {
+    if(validInput(collectionRate) && Number(collectionRate) >= 5) {
+	console.log("collection rate updated");
 	localStorage.setItem("collectionRate", collectionRate);
     }
 
@@ -36,6 +37,7 @@ function checkInputs()
     var tempAlert = document.getElementById("tempAlert").value;
     var levelAlert = document.getElementById("levelAlert").value;
     var qualityAlert = document.getElementById("qualityAlert").value;
+    var cmd = document.getElementById("cmd").value;
 
     var warnObj = {};
 
@@ -44,11 +46,15 @@ function checkInputs()
     if(validInput(levelAlert))
 	warnObj.L_ALERT = levelAlert;
     if(validInput(qualityAlert))
-	warnObj.Q_ALERT = qualityAlert
+	warnObj.Q_ALERT = qualityAlert;
+
+    if(cmd === "STOP" || cmd === "START")
+	warnObj.CMD = cmd;
 
     if(Object.keys(warnObj).length != 0) {
 	console.log("sending: ", warnObj);
 	$.post("/settings", warnObj);
+	document.getElementById("cmd").value = "";
     }
 }
 
