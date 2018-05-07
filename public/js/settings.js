@@ -26,32 +26,42 @@ function checkInputs()
     else
 	units = IMP.value;
     //Collection Rate
-    var tempRate = document.getElementById("tempRate").value;
-    var levelRate = document.getElementById("levelRate").value;
-    var qualityRate = document.getElementById("qualityRate").value;
+    var collectionRate = document.getElementById("collectionRate").value;
+
+    if(validInput(collectionRate)) {
+	localStorage.setItem("collectionRate", collectionRate);
+    }
+
     //& Triggers
     var tempAlert = document.getElementById("tempAlert").value;
     var levelAlert = document.getElementById("levelAlert").value;
     var qualityAlert = document.getElementById("qualityAlert").value;
 
-    var obj = new Object();
-    if(validInput(tempRate))
-	obj.tempRate = tempRate;
-    if(validInput(levelRate))
-	obj.levelRate = levelRate;
-    if(validInput(qualityAlert))
-	obj.qualityRate = qualityRate;
+    var warnObj = {};
 
     if(validInput(tempAlert))
-	obj.T_ALERT = tempAlert;
+	warnObj.T_ALERT = tempAlert;
     if(validInput(levelAlert))
-	obj.L_ALERT = levelAlert;
+	warnObj.L_ALERT = levelAlert;
     if(validInput(qualityAlert))
-	obj.Q_ALERT = qualityAlert
+	warnObj.Q_ALERT = qualityAlert
 
-    if(!isEmpty(obj))
-    {
-	console.log("sending: ", obj);
-	$.post("/settings", obj);
+    if(Object.keys(warnObj).length != 0) {
+	console.log("sending: ", warnObj);
+	$.post("/settings", warnObj);
     }
 }
+
+function getCurrentSettings()
+{
+    $.getJSON("/prevSettings", (settings) => {
+	document.getElementById("tempAlert").value = settings.tAlert;
+	document.getElementById("levelAlert").value = settings.lAlert;
+	document.getElementById("qualityAlert").value = settings.qAlert;
+    });
+
+    document.getElementById("collectionRate").value = localStorage.getItem("collectionRate");
+
+}
+
+getCurrentSettings();

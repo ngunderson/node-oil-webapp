@@ -1,4 +1,5 @@
-var POLL_RATE = 5000; // 5s poll interval
+var POLL_RATE = (Number(localStorage.getItem("collectionRate")) * 1000)
+                || 5000; // 5s default poll interval
 var prev_data = {};
 getLatestData();
 setInterval(getLatestData, POLL_RATE);

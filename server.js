@@ -202,6 +202,15 @@ app.post('/settings', (req, res) => {
     });
 });
 
+app.get('/prevSettings', (req, res) => {
+    var settings = {
+	"tAlert": TEMP_ALERT,
+	"lAlert": LEVEL_ALERT,
+	"qAlert": QUALITY_ALERT,
+    }
+    res.send(JSON.stringify(settings));
+});
+
 
 app.listen(PORT, HOST);
 console.log(`Running on http://${HOST}:${PORT}`);
