@@ -3,6 +3,7 @@
     <title>Oil Monitor</title>
     <link rel="icon" href="image/favicon.ico">
     <link rel="stylesheet" type="text/css" href="css/settings.css">
+    <script src="js/plotly-1.36.1.min.js"></script>
     <script src="js/jquery-3.3.1.min.js"></script>
   </head>
 
@@ -17,54 +18,33 @@
     <div><a href="/historic"><img id="AdvancedGraph" src="image/graph.png" style="position: absolute; width: 36; height: 27; top: 180; left: 15;"/></a></div>
     <div><a href="/settings"><img id="Settings" src="image/settings.png" style="position: absolute; width: 36; height: 36; top: 248; left: 15;"/></a></div>
 
-	<!-- Radio Buttons for units-->
+    	<!-- Radio Buttons for units-->
 	<div class="mfWFCompCls" id="cmpDaa9aac3f78658677af9f9d5a501f2a60" style="white-space: nowrap; line-height: 100%; transform: rotate(0deg); overflow: hidden; position: absolute; width: 300px; height: 105px; top: 185px; left: 175px; padding: 5px; z-index: 15; pointer-events: all;">
 
 	<form>
 	<p>Units:</p>
 	<div>
-		<input type="radio" id="contactChoice1"
-		 name="contact" value="email" checked="checked">
-		<label for="contactChoice1">SI Units</label>
-
-		<input type="radio" id="contactChoice2"
-		 name="contact" value="phone">
-		<label for="contactChoice2">Imperial Units</label>
+		<input type="radio" id="radSI"
+		 name="contact" value="SI" checked="true">
+		<label for="radSI">SI Units</label>
+		<input type="radio" id="radIMP"
+		 name="contact" value="IMP">
+		<label for="radIMP">Imperial Units</label>
     </div>
 	</form>
 
   </div>
-  <span class="mfWFCompCls" id="cmpDac2630de271f9e47c69e03747b185006" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 215px; height: 40px; top: 315px; left: 145px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: bold; font-style: normal; text-decoration: none; font-size: 20px; color: rgb(0, 0, 0); text-align: left; z-index: 19;">Data&nbsp;<wbr>Collection&nbsp;<wbr>Rate:</span>
-    <style>
-      .button {
-          background-color: #4CAF50;
-          border: none;
-          color: white;
-          padding: 15px 25px;
-          text-align: center;
-          font-size: 16px;
-          cursor: pointer;
-          transform:  rotate(0deg); position: absolute; width: 175px; height: 52px; top: 685px; left: 949px; z-index: 33;
-      }
-
-      .button:hover {
-          background-color: green;
-      }
-      </style>
-
-
   <!-- Data Collection rate stuff-->
   <span class="mfWFCompCls" id="cmpDac2630de271f9e47c69e03747b185006" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 215px; height: 40px; top: 315px; left: 145px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: bold;   font-style: normal; text-decoration: none; font-size: 20px; color: rgb(0, 0, 0); text-align: left; z-index: 19;">Data Collection Rate:</span>
-	<span class="mfWFCompCls" id="cmpD70852b518b26717f4abd54d641d0a41e" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 125px; height: 25px; top: 380px; left: 185px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 27;">Oil Temperature Rate:</span>
+  <span class="mfWFCompCls" id="cmpD70852b518b26717f4abd54d641d0a41e" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 125px; height: 25px; top: 380px; left: 185px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 27;">Oil Temperature Rate:</span>
   <span class="mfWFCompCls" id="cmpDc635d383cca220047b5460f8e33fa90f" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 100px; height: 25px; top: 435px; left: 185px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 29;">Oil Level Rate:</span>
   <span class="mfWFCompCls" id="cmpD36c20207289358d021c27f1f6a8d4fa6" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 100px; height: 25px; top: 490px; left: 185px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 31;">Oil Quality Rate:</span>
-  <span class="mfWFCompCls" id="cmpDb10e43d105c8f5f9122c93d07fb14705" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 250px; height: 20px; top: 375px; left: 340px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 49;">Warning Level: <input type = "text"></span>
-  <span class="mfWFCompCls" id="cmpD5a54846f7c139e7ed3f1dee2aa4a936e" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 250px; height: 20px; top: 430px; left: 340px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 61;">Warning Level: <input type = "text"></span>
-  <span class="mfWFCompCls" id="cmpD91ad3de4b19ef5be3bbc36896aef2c79" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 250px; height: 20px; top: 485px; left: 340px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 63;">Warning Level: <input type = "text"></span>
-  <span class="mfWFCompCls" id="cmpDed2211f401931e9d4a65a2879f7c90d9" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 250px; height: 20px; top: 375px; left: 683px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 57;">Critical Level: <input type = "text"></span>
-  <span class="mfWFCompCls" id="cmpD7ec646cf38ca67fb105ae39fa047488b" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 100px; height: 20px; top: 390px; left: 570px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 35;">seconds</span>
-  <span class="mfWFCompCls" id="cmpD9a93fb64cad8ea3d999b446d6e804e0e" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 100px; height: 20px; top: 445px; left: 570px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 37;">seconds</span>
-  <span class="mfWFCompCls" id="cmpD60ec8a91ff9cfe5bc502c0fe5b0fa545" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 100px; height: 20px; top: 500px; left: 570px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 39;">seconds</span>
+  <span class="mfWFCompCls" id="cmpDb10e43d105c8f5f9122c93d07fb14705" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 250px; height: 20px; top: 375px; left: 340px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 49;"><input id="tempRate" type = "text"></span>
+  <span class="mfWFCompCls" id="cmpD5a54846f7c139e7ed3f1dee2aa4a936e" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 250px; height: 20px; top: 430px; left: 340px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 61;"><input id="levelRate" type = "text"></span>
+  <span class="mfWFCompCls" id="cmpD91ad3de4b19ef5be3bbc36896aef2c79" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 250px; height: 20px; top: 485px; left: 340px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 63;"><input id="qualityRate" type = "text"></span>
+  <span class="mfWFCompCls" id="cmpD7ec646cf38ca67fb105ae39fa047488b" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 100px; height: 20px; top: 380px; left: 530px; padding: 3px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 35;">seconds</span>
+  <span class="mfWFCompCls" id="cmpD9a93fb64cad8ea3d999b446d6e804e0e" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 100px; height: 20px; top: 435px; left: 530px; padding: 3px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 37;">seconds</span>
+  <span class="mfWFCompCls" id="cmpD60ec8a91ff9cfe5bc502c0fe5b0fa545" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 100px; height: 20px; top: 490px; left: 530px; padding: 3px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 39;">seconds</span>
 
 
   <!--trigger range-->
@@ -72,14 +52,16 @@
   <span class="mfWFCompCls" id="cmpD8cb49cb80a5fbb061bd6048349f1f4c7" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 125px; height: 25px; top: 593px; left: 185px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 43;">Oil Temperature:</span>
   <span class="mfWFCompCls" id="cmpDd8f92642d06bc9d554673594f23a7c02" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 100px; height: 25px; top: 648px; left: 185px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 45;">Oil Level:</span>
   <span class="mfWFCompCls" id="cmpDb74b9b7a93c14bbaa5fd84200ba9d7c1" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 100px; height: 25px; top: 703px; left: 185px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 47;">Oil Quality:</span>
-  <span class="mfWFCompCls" id="cmpD465452f9acfba87c2f531b1739f81cee" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 250px;  height: 20px; top: 596px; left: 340px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 49;">Warning Level: <input type = "text"></span>
-  <span class="mfWFCompCls" id="cmpD037f69f706069695c0919e16d68f3088" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 250px;  height: 20px; top: 646px; left: 340px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 61;">Warning Level: <input type = "text"></span>
-  <span class="mfWFCompCls" id="cmpD2290cfdfa48b790e58fbdf7bb2c03e4b" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 250px;  height: 20px; top: 700px; left: 340px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 63;">Warning Level: <input type = "text"></span>
-  <span class="mfWFCompCls" id="cmpDe7b7aae0fcaf37cc217c15addd7d0614" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 250px; height: 20px; top: 596px; left: 583px; padding: 5px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 57;">Critical Level: <input type = "text"></span>
-  <!-- Apply button -->
+  <span class="mfWFCompCls" id="cmpD465452f9acfba87c2f531b1739f81cee" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 250px;  height: 20px; top: 580px; left: 340px; padding: 3px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 49;">Warning Level: <input id="tempAlert" type = "text"></span>
+  <span class="mfWFCompCls" id="cmpD037f69f706069695c0919e16d68f3088" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 250px;  height: 20px; top: 635px; left: 340px; padding: 3px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 61;">Warning Level: <input id="levelAlert" type = "text"></span>
+  <span class="mfWFCompCls" id="cmpD2290cfdfa48b790e58fbdf7bb2c03e4b" style="pointer-events: all; line-height: 100%; transform: rotate(0deg); position: absolute; width: 250px;  height: 20px; top: 690; left: 340px; padding: 3px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-weight: normal; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0); text-align: left; z-index: 63;">Warning Level: <input id="qualityAlert" type = "text"></span>
 
+
+
+  <!-- Apply button -->
   <div class="mfWFCompCls" id="cmpDa3378330be722e3136cd66578f03fd84" width="112" height="52" style="pointer-events: all; transform: rotate(0deg); position: absolute; width: 112px; height: 52px; top: 685px; left: 949px; z-index: 33;"> <canvas id="cmpDa3378330be722e3136cd66578f03fd84_cvs" width="112" height="52" style="-webkit-transform: translateZ(0);  position:absolute; width:112px; height:52px; top:0px; left:0px; "> </canvas><span id="cmpDa3378330be722e3136cd66578f03fd84_txt" style="padding-left: 5px; padding-right: 5px; overflow: hidden; white-space: nowrap; text-align: center; font-weight: normal; transform: translateZ(0px); position: absolute; width: 100px; height: 40px; line-height: 42px; top: 6px; left: 6px; -moz-user-select: none; font-family: &quot;Source Sans Pro&quot;; font-style: normal; text-decoration: none; font-size: 12px; color: rgb(0, 0, 0);">Apply&nbsp;<wbr>Changes</span></div>
-  <button class="button">Apply Changes</button>
+  <button class="button" onclick="checkInputs();" >Apply Changes</button>
+
   <script src="js/settings.js"></script>
 
   </body>
