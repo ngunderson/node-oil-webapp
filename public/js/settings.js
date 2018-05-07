@@ -67,7 +67,17 @@ function getCurrentSettings()
     });
 
     document.getElementById("collectionRate").value = localStorage.getItem("collectionRate");
-
+    if (localStorage.getItem("units") === "IMP") {
+	$("#radIMP").prop("checked", true);
+    }
 }
+
+$('input[type=radio][name=units]').change(function() {
+    if (this.value == 'IMP') {
+	localStorage.setItem("units", "IMP");
+    } else {
+	localStorage.removeItem("units");
+    }
+});
 
 getCurrentSettings();

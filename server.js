@@ -11,6 +11,7 @@ var NoRetry = require('azure-iot-common').NoRetry;
 // Constants
 const PORT = 8080;
 const HOST = '0.0.0.0';
+const DEFAULT = {"default": "no data received"};
 
 // Alerts
 var TEMP_ALERT = 60;
@@ -26,14 +27,15 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 storage = azure.createTableService();
 
-var mostRecentMessage = {"default": "no data received"};
+var mostRecentMessage = DEFAULT;
 
 // streaming device to cloud messages
 var iotHubReader = new iotHubClient(process.env['Azure.IoT.IoTHub.ConnectionString'], process.env['Azure.IoT.IoTHub.ConsumerGroup']);
 iotHubReader.startReadMessage((obj, date) => {
     try {
-	if (obj.default = "empty") {
+	if (obj.default === "empty") {
 	    console.log("device paused message");
+	    mostRecentMessage = DEFAULT;
 	    return;
 	}
         console.log("Message: ", obj);

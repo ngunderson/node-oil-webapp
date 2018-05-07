@@ -132,6 +132,14 @@ function displayData(data) {
     var time = data.time;
     console.log("INFO: Time is ", time);
 
+    if (localStorage.getItem("units") === "IMP") {
+	temp1 = temp1 * 9/5 + 32;
+	temp2 = temp2 * 9/5 + 32;
+	temp3 = temp3 * 9/5 + 32;
+	temp4 = temp4 * 9/5 + 32;
+	avgTemp = avgTemp * 9/5 + 32;
+    }
+
     //Does not matter if the values are undefined as they wont be updated
     updateSensors(temp1,temp2,temp3,temp4);
 
