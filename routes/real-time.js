@@ -1,5 +1,6 @@
 const moment = require('moment-timezone');
 const iotHubClient = require('../lib/iot-hub.js');
+const settings = require('./settings.js');
 
 const DEFAULT = {"default": "no data received"};
 
@@ -16,10 +17,11 @@ iotHubReader.startReadMessage((obj, date) => {
 	}
 	if (obj.hasOwnProperty("ALERTS")) {
 	    console.log("obj: ", obj);
-	    TEMP_ALERT = Number(obj.ALERTS.TEMPERATURE);
-	    LEVEL_ALERT = Number(obj.ALERTS.LEVEL);
-	    QUALITY_ALERT = Number(obj.ALERTS.QUALITY);
-	    console.log("setting alerts", TEMP_ALERT, LEVEL_ALERT, QUALITY_ALERT);
+	    settings.TEMP_ALERT = Number(obj.ALERTS.TEMPERATURE);
+	    settings.LEVEL_ALERT = Number(obj.ALERTS.LEVEL);
+	    settings.QUALITY_ALERT = Number(obj.ALERTS.QUALITY);
+	    console.log("setting alerts", settings.TEMP_ALERT,
+			settings.LEVEL_ALERT, settings.QUALITY_ALERT);
 	    return;
 	}
         date = date || Date.now()
