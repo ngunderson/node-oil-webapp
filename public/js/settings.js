@@ -53,7 +53,19 @@ function checkInputs()
 
     if(Object.keys(warnObj).length != 0) {
 	console.log("sending: ", warnObj);
-	$.post("/settings", warnObj);
+	$.ajax("/settings", {
+	    data: warnObj,
+	    type: "POST",
+	    error: (err) => {
+		alert("Message NOT SENT to device!")
+		getCurrentSettings();
+	    },
+	    success: (data) => {
+		alert("Message SENT to device!");
+		console.log("Settings update");
+		getCurrentSettings();
+	    }
+	});
 	document.getElementById("cmd").value = "";
     }
 }
