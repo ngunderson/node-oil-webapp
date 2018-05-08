@@ -2,7 +2,7 @@
 function validInput(value)
 {
     if(value != "" && !isNaN(value))
-	if(value > 0)
+	if(value >= 0)
 	    return true;
     return false;
 }

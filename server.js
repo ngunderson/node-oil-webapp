@@ -178,7 +178,8 @@ app.post('/settings', (req, res) => {
     cmd.L_ALERT = Number(req.body.L_ALERT);
     cmd.Q_ALERT = Number(req.body.Q_ALERT);
 
-    if (isNaN(cmd.T_ALERT) || isNaN(cmd.L_ALERT) || isNaN(cmd.Q_ALERT) ) {
+    if (isNaN(cmd.T_ALERT) && isNaN(cmd.L_ALERT) && isNaN(cmd.Q_ALERT) ) {
+	console.log("invalid");
 	res.sendStatus(400);
 	return;
     }
@@ -195,8 +196,8 @@ app.post('/settings', (req, res) => {
     }
 
     if (Object.keys(cmd).length == 0) {
-	res.sendStatus(200);
 	console.log("settings have not changed, returning")
+	res.sendStatus(200);
 	return;
     }
 
