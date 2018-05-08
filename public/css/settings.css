@@ -1,21 +1,38 @@
-.button {
+.rateButton {
     background-color: #4CAF50;
     border: none;
     color: white;
     padding: 15px 25px;
     text-align: center;
-    font-size: 16px;
+    font-size: 12px;
     cursor: pointer;
     transform:  rotate(0deg);
     position: absolute;
-    width: 175px;
-    height: 52px;
-    top: 520px;
+    width: 130px;
+    height: 40px;
+    top: 258px;
     left: 600px;
     z-index: 33;
 }
 
-.button:hover {
+.deviceButton {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 25px;
+    text-align: center;
+    font-size: 12px;
+    cursor: pointer;
+    transform:  rotate(0deg);
+    position: absolute;
+    width: 130px;
+    height: 40px;
+    top: 536px;
+    left: 600px;
+    z-index: 33;
+}
+
+button:hover {
     background-color: green;
 }
 

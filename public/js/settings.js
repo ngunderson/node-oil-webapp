@@ -15,25 +15,9 @@ function isEmpty(obj)
 }
 
 
-function checkInputs()
+function sendChanges()
 {
-    var SI = document.getElementById("radSI");
-    var IMP = document.getElementById("radIMP");
-    var units;
-    //Getting Units
-    if(SI.checked)
-	units = SI.value;
-    else
-	units = IMP.value;
-    //Collection Rate
-    var collectionRate = document.getElementById("collectionRate").value;
-
-    if(validInput(collectionRate) && Number(collectionRate) >= 5) {
-	console.log("collection rate updated");
-	localStorage.setItem("collectionRate", collectionRate);
-    }
-
-    //& Triggers
+    // Triggers
     var tempAlert = document.getElementById("tempAlert").value;
     var levelAlert = document.getElementById("levelAlert").value;
     var qualityAlert = document.getElementById("qualityAlert").value;
@@ -56,17 +40,31 @@ function checkInputs()
 	$.ajax("/settings", {
 	    data: warnObj,
 	    type: "POST",
-	    error: (err) => {
-		alert("Message NOT SENT to device!")
+	    error: (err, txtStatus, xhr) => {
+		alert("Sending message to device FAILED!")
 		getCurrentSettings();
 	    },
-	    success: (data) => {
-		alert("Message SENT to device!");
-		console.log("Settings update");
+	    success: (data, txtStatus, xhr) => {
+		if (xhr.status === 204) {
+		    alert("No changes detected, updates not sent!");
+		} else {
+		    alert("Message SENT to device!");
+		}
 		getCurrentSettings();
 	    }
 	});
 	document.getElementById("cmd").value = "";
+    }
+}
+
+function changeRate()
+{
+    //Collection Rate
+    var collectionRate = document.getElementById("collectionRate").value;
+
+    if(validInput(collectionRate) && Number(collectionRate) >= 5) {
+	console.log("collection rate updated");
+	localStorage.setItem("collectionRate", collectionRate);
     }
 }
 
