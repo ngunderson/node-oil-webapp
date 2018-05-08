@@ -38,7 +38,14 @@ iotHubReader.startReadMessage((obj, date) => {
 	    mostRecentMessage = DEFAULT;
 	    return;
 	}
-        console.log("Message: ", obj);
+	if (obj.hasOwnProperty("ALERTS")) {
+	    console.log("obj: ", obj);
+	    TEMP_ALERT = Number(obj.ALERTS.TEMPERATURE);
+	    LEVEL_ALERT = Number(obj.ALERTS.LEVEL);
+	    QUALITY_ALERT = Number(obj.ALERTS.QUALITY);
+	    console.log("setting alerts", TEMP_ALERT, LEVEL_ALERT, QUALITY_ALERT);
+	    return;
+	}
         date = date || Date.now()
 	Object.assign(obj, { time: moment.utc(date).format('hh:mm:ss')});
 	obj.temp1 = obj.temp1.toFixed(2);
