@@ -3,9 +3,9 @@ const Message = require('azure-iot-common').Message;
 const NoRetry = require('azure-iot-common').NoRetry;
 
 // Alerts
-exports.TEMP_ALERT = 100;
-exports.LEVEL_ALERT = .01;
-exports.QUALITY_ALERT = .01;
+exports.TEMP_ALERT = 104;
+exports.LEVEL_ALERT = .04;
+exports.QUALITY_ALERT = .04;
 TARGET_DEVICE = 'pi';
 
 // sending cloud to device messages
