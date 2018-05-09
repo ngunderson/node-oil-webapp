@@ -6,7 +6,7 @@ const NoRetry = require('azure-iot-common').NoRetry;
 exports.TEMP_ALERT = 100;
 exports.LEVEL_ALERT = .01;
 exports.QUALITY_ALERT = .01;
-exports.TARGET_DEVICE = 'pi';
+TARGET_DEVICE = 'pi';
 
 // sending cloud to device messages
 var serviceClient = Client.fromConnectionString(process.env['Azure.IoT.IoTHub.ConnectionString']);
