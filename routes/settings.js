@@ -26,11 +26,11 @@ exports.setSettings = (req, res) => {
 	return;
     }
 
-    if (cmd.T_ALERT == TEMP_ALERT)
+    if (cmd.T_ALERT == exports.TEMP_ALERT)
 	delete cmd.T_ALERT;
-    if (cmd.L_ALERT == LEVEL_ALERT)
+    if (cmd.L_ALERT == exports.LEVEL_ALERT)
 	delete cmd.L_ALERT;
-    if (cmd.Q_ALERT == QUALITY_ALERT)
+    if (cmd.Q_ALERT == exports.QUALITY_ALERT)
 	delete cmd.Q_ALERT;
 
     if (req.body.CMD == "START" || req.body.CMD == "STOP") {
@@ -102,10 +102,10 @@ function endConnection(res, cmd) {
 	    console.log("timeout: connection closed");
 	});
     } else {
-	TEMP_ALERT = cmd.T_ALERT || TEMP_ALERT;
-	LEVEL_ALERT = cmd.L_ALERT || LEVEL_ALERT;
-	QUALITY_ALERT = cmd.Q_ALERT || QUALITY_ALERT
-	console.log("VARS: ", TEMP_ALERT, LEVEL_ALERT, QUALITY_ALERT);
+	exports.TEMP_ALERT = cmd.T_ALERT || exports.TEMP_ALERT;
+	exports.LEVEL_ALERT = cmd.L_ALERT || exports.LEVEL_ALERT;
+	exports.QUALITY_ALERT = cmd.Q_ALERT || exports.QUALITY_ALERT;
+	console.log("VARS: ", exports.TEMP_ALERT, exports.LEVEL_ALERT, exports.QUALITY_ALERT);
 	status = 200;
     }
     res.sendStatus(status);

@@ -24,6 +24,7 @@ iotHubReader.startReadMessage((obj, date) => {
 			settings.LEVEL_ALERT, settings.QUALITY_ALERT);
 	    return;
 	}
+	console.log("message received, ", obj);
         date = date || Date.now()
 	Object.assign(obj, { time: moment.utc(date).format('hh:mm:ss')});
 	obj.temp1 = obj.temp1.toFixed(2);
