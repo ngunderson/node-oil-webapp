@@ -1,5 +1,6 @@
+# This script can be used to rebuild and restart the container after changes are made.
 #!/bin/bash
-imageName=falconer/node-oil-server:v0.0.2
+imageName=falconer/node-oil-server:v0.0.5
 containerName=server
 
 docker build -t $imageName -f Dockerfile  .
